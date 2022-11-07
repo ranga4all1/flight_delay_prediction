@@ -32,6 +32,8 @@ Any airline flights that departed or arrived 15 min late at their destination to
  - CAUTION: Deploying model to clould services may **incurr charges** unless you use free tier (if available). Verify before deployment, delete after deployment to avoid recurring charges etc. 
 
 ### How to run this project?
+ Prerequisite: Docker. If not installed already, install locally using https://docs.docker.com/
+
 1. Clone the repo
 ```
 git clone https://github.com/ranga4all1/flight_delay_prediction.git
@@ -40,7 +42,7 @@ git clone https://github.com/ranga4all1/flight_delay_prediction.git
 ```
 pip install opendatasets scikit-learn xgboost pandas numpy bentoml 
 ```
-3. Run `train.py'
+3. Run `train.py' and supply your kaggle credentials when prompted (for dataset download from kaggle)
 ```
 cd flight_delay_prediction
 python train.py
@@ -54,6 +56,41 @@ bentoml models list
 cd flight_delay_prediction_service_bentoml
 bentoml serve service.py:svc --reload
 ```
+    - Go to http://0.0.0.0:3000
+    - Click on Service APIs -> POST -> Try it out. Fill out 'request body' with JSON input and click -> Execute
+    - Check 'Response body' - e. g. 
+
+        {
+        "status": "NOT DELAYED"
+        }
+
+    - Use this json input for testing. Modify values to test multiple times and obtain various results - "DELAYED". "MAYBE", "NOT DELAYED"
+
+    {
+    "month": 11,
+    "day_of_month": 21,
+    "day_of_week": 4,
+    "carrier_code": "dl",
+    "dest": "bos",
+    "scheduled_duration": 80,
+    "distance": 187,
+    "scheduled_departure": 420,
+    "actual_dep_time": 420,
+    "scheduled_arrival": 500,
+    "temperature": 39,
+    "dew_point": 33,
+    "humidity": 79,
+    "wind": "nne",
+    "wind_speed": 3,
+    "wind_gust": 0,
+    "pressure": 30.2,
+    "condition": "fair",
+    "flt_sch_arrival": 41,
+    "flt_sch_departure": 31,
+    "taxi_out": 27
+    }
+
+
 5. Build a Bento - run the `bentoml build` CLI command from the same directory
 ```
 bentoml build
